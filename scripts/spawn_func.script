@@ -48,7 +48,7 @@ function create_circle(index, is_red)
 	local circle_position = vmath.vector3(actual_x, actual_y, 1)
 
 	local prop = { color_is_red = is_red, x = actual_x, y = actual_y }
-	local circle_id = factory.create("#factory", circle_position, nil, prop, 1)
+	local circle_id = factory.create("#cell_factory", circle_position, nil, prop, 1)
 	circles[index] = circle_id
 end
 
