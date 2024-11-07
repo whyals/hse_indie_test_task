@@ -1,0 +1,158 @@
+script: "/scripts/ui_func.gui_script"
+fonts {
+  name: "default"
+  font: "/builtins/fonts/default.font"
+}
+nodes {
+  position {
+    x: 564.0
+    y: 99.0
+  }
+  size {
+    x: 300.0
+    y: 70.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "score_bar"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: -62.0
+  }
+  size {
+    x: 200.0
+    y: 200.0
+  }
+  type: TYPE_TEXT
+  text: "SCORE:"
+  font: "default"
+  id: "score_text"
+  outline {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  shadow {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  parent: "score_bar"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 75.0
+  }
+  size {
+    x: 200.0
+    y: 200.0
+  }
+  type: TYPE_TEXT
+  text: "0"
+  font: "default"
+  id: "score_count"
+  outline {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  shadow {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  parent: "score_bar"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 356.0
+    y: 517.0
+  }
+  size {
+    x: 450.0
+    y: 100.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "final_window"
+  inherit_alpha: true
+  alpha: 0.0
+}
+nodes {
+  size {
+    x: 200.0
+    y: 200.0
+  }
+  type: TYPE_TEXT
+  text: "Game is over!\n"
+  "Your score is "
+  font: "default"
+  id: "final_text"
+  outline {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  shadow {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  parent: "final_window"
+  inherit_alpha: true
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 101.0
+    y: 99.0
+  }
+  size {
+    x: 180.0
+    y: 70.0
+  }
+  color {
+    x: 0.467
+    y: 0.659
+    z: 0.973
+  }
+  type: TYPE_BOX
+  id: "start_button"
+  inherit_alpha: true
+}
+nodes {
+  size {
+    x: 200.0
+    y: 200.0
+  }
+  type: TYPE_TEXT
+  text: "START"
+  font: "default"
+  id: "start_text"
+  outline {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  shadow {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  parent: "start_button"
+  inherit_alpha: true
+}
+material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT

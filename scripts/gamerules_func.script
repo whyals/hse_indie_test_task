@@ -1,0 +1,56 @@
+go.property("is_red_color_used", 0)
+go.property("score", 0)
+
+function init(self)
+	score = 0
+	is_red_color_used = 0
+end
+
+function on_message(self, message_id, message, sender)
+	
+	if message_id == hash("open_circle") then
+		
+		if is_red_color_used == 0 then
+			if go.get(sender, "color_is_red") then
+				is_red_color_used = 1
+			else 
+				is_red_color_used = 2
+			end
+			score = score + 1
+			msg.post("/ui_folder", "score_changed", { new_score = score })
+			
+		elseif (is_red_color_used == 2 and go.get(sender, "color_is_red")) or (is_red_color_used == 1 and not go.get(sender, "color_is_red")) then
+			msg.post("/ui_folder", "game_finished", { final_score = score, win = false })
+			msg.post("/cursor_folder#cursor_func", "game_finished")
+			
+		elseif (is_red_color_used == 1 and go.get(sender, "color_is_red")) or (is_red_color_used == 2 and not go.get(sender, "color_is_red")) then
+			score = score + 1
+			msg.post("/ui_folder", "score_changed", { new_score = score })
+
+			if score == 50 then
+				msg.post("/ui_folder", "game_finished", { final_score = score, win = true })
+			end
+		end
+		
+	elseif message_id == hash("spawn") then
+		spawn_new_circles(self)
+		
+	elseif message_id == hash("respawn") then
+		spawn_new_circles(self)
+		
+	elseif message_id == hash("start") then
+		start_game(self)
+	end
+end
+
+function spawn_new_circles(self)
+	score = 0
+	is_red_color_used = 0
+	msg.post("/spawn_folder#spawn_func", "spawn")
+	msg.post("/ui_folder", "score_changed", { new_score = 0 })
+end
+
+function start_game(self)
+	msg.post("/spawn_folder#spawn_func", "color_to_gray")
+	msg.post("/cursor_folder#cursor_func", "start")
+end

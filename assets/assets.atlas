@@ -1,0 +1,19 @@
+images {
+  image: "/assets/black_background.png"
+}
+images {
+  image: "/assets/blue_circle.png"
+}
+images {
+  image: "/assets/dark_back.png"
+}
+images {
+  image: "/assets/gray_circle.png"
+}
+images {
+  image: "/assets/light_back.png"
+}
+images {
+  image: "/assets/red_circle.png"
+}
+extrude_borders: 3

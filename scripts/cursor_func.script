@@ -1,0 +1,58 @@
+go.property("cursor_enabled", false)
+go.property("current_collision", nil)
+
+function init(self)
+	self.cursor_enabled = false
+	self.current_collision = nil
+	toggle_cursor_focus(false)
+end
+
+function update(self, dt)
+	self.current_collision = nil
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("collision_response") then
+		handle_collision_response(self, message)
+	elseif message_id == hash("game_finished") then
+		toggle_cursor_focus(false)
+	elseif message_id == hash("start") then
+		toggle_cursor_focus(true)
+	end
+end
+
+function handle_collision_response(self, message)
+	if not self.current_collision or go.get_position(self.current_collision).z < message.other_position.z then
+		self.current_collision = message.other_id
+	end
+end
+
+function on_input(self, action_id, action)
+	if action_id == nil or action_id == hash("touch") or action_id == hash("click") then
+		local action_position = vmath.vector3(action.x, action.y, 0)
+		go.set_position(action_position)
+
+		if action.pressed then
+			enable_collision(true)
+		elseif action.released and self.current_collision then
+			enable_collision(false)
+			msg.post(self.current_collision, "open_circle")
+		end
+	end
+end
+
+function toggle_cursor_focus(enable)
+	if enable then
+		msg.post(".", "acquire_input_focus")
+	else
+		msg.post(".", "release_input_focus")
+	end
+end
+
+function enable_collision(enable)
+	if enable then
+		msg.post("#collisionobject", "enable")
+	else
+		msg.post("#collisionobject", "disable")
+	end
+end

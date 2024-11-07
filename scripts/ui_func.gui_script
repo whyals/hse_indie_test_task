@@ -1,0 +1,69 @@
+function init(self)
+	msg.post(".", "acquire_input_focus")
+
+	self.button = gui.get_node("start_button")
+	self.button_text = gui.get_node("start_text")
+	self.button_state = 'spawn'
+	gui.set_text(self.button_text, 'START')
+
+	self.score = gui.get_node("score_count")
+	self.final_window = gui.get_node("final_window")
+	self.final_window_text = gui.get_node("final_text")
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("game_finished") then
+		show_final_window(self, true, message.final_score)
+	elseif message_id == hash("score_changed") then
+		change_score(self, message.new_score)
+	end
+end
+
+function on_input(self, action_id, action)
+	if (action_id == hash("click")) and action.pressed and gui.pick_node(self.button, action.x, action.y) then
+		if self.button_state == 'spawn' then
+			msg.post("/gamerules_folder#gamerules_func", "spawn")
+			gui.set_text(self.button_text, 'ANOTHER START')
+			self.button_state = 'another_start'
+		elseif self.button_state == 'another_start' then
+			msg.post("/gamerules_folder#gamerules_func", "start")
+			gui.set_enabled(self.button, false)
+			gui.set_enabled(self.button_text, false)
+			gui.set_visible(self.button, false)
+			gui.set_visible(self.button_text, false)
+		end
+	end
+end
+
+function change_score(self, newScore)
+	gui.set_text(self.score, newScore)
+end
+
+function show_final_window(self, isVisible, score)
+	if isVisible then
+		local to_color = gui.get_color(self.final_window)
+		to_color.w = 1
+		gui.animate(self.final_window, gui.PROP_COLOR, to_color, gui.EASING_IN, 0, 0, nil)
+
+		gui.set_text(self.final_window_text, "Game over!\nYour score " .. score)
+
+		to_color = gui.get_color(self.final_window_text)
+		to_color.w = 1
+		gui.animate(self.final_window_text, gui.PROP_COLOR, to_color, gui.EASING_IN, 0, 0, nil)
+	else
+		local to_color = gui.get_color(self.final_window)
+		to_color.w = 0
+		gui.animate(self.final_window, gui.PROP_COLOR, to_color, gui.EASING_IN, 0, 0, nil)
+
+		to_color = gui.get_color(self.final_window_text)
+		to_color.w = 0
+		gui.animate(self.final_window_text, gui.PROP_COLOR, to_color, gui.EASING_IN, 0, 0, nil)
+
+		self.button_state = 'spawn'
+		gui.set_text(self.button_texte, 'Spawn')
+		gui.set_enabled(self.button, true)
+		gui.set_enabled(self.button_text, true)
+		gui.set_visible(self.button, true)
+		gui.set_visible(self.button_text, true)
+	end
+end

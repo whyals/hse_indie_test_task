@@ -1,0 +1,19 @@
+[bootstrap]
+main_collection = /scenes/main.collectionc
+
+[script]
+shared_state = 1
+
+[display]
+width = 720
+height = 870
+
+[android]
+input_method = HiddenInputField
+
+[project]
+title = BlindSapper
+
+[sprite]
+max_count = 1024
+

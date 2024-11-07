@@ -1,0 +1,72 @@
+local circles = {}
+local used_positions = {}
+local step = 72
+local start_pos_x = 36
+local start_pos_y = 185
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("spawn") then
+		reset_circles()
+		create_circles()
+		set_circles_visibility(true)
+	elseif message_id == hash("color_to_gray") then
+		set_circles_visibility(false)
+	end
+end
+
+function set_circles_visibility(is_visible)
+	for i, circle in ipairs(circles) do
+		local message = is_visible and "show_circle" or "hide_circle"
+		msg.post(circle, message)
+	end
+end
+
+function is_position_used(x, y)
+	for i, position in ipairs(used_positions) do
+		if position.x == x and position.y == y then
+			return true
+		end
+	end
+	return false
+end
+
+function get_new_position()
+	local x, y
+	repeat
+		x = math.random(1, 10)
+		y = math.random(1, 10)
+	until not is_position_used(x, y)
+
+	table.insert(used_positions, { x = x, y = y })
+	return x, y
+end
+
+function create_circle(index, is_red)
+	local x, y = get_new_position()
+	local actual_x = start_pos_x + ((x - 1) * step)
+	local actual_y = start_pos_y + ((y - 1) * step)
+	local circle_position = vmath.vector3(actual_x, actual_y, 1)
+
+	local prop = { color_is_red = is_red, x = actual_x, y = actual_y }
+	local circle_id = factory.create("#factory", circle_position, nil, prop, 1)
+	circles[index] = circle_id
+end
+
+function create_circles()
+	math.randomseed(os.time())
+	used_positions = {}
+	for i = 1, 50 do
+		create_circle(i, true)
+	end
+	for i = 51, 100 do
+		create_circle(i, false)
+	end
+end
+
+function reset_circles()
+	for i, circle in ipairs(circles) do
+		go.delete(circle)
+	end
+	circles = {}
+	used_positions = {}
+end

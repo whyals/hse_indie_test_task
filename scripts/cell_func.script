@@ -1,0 +1,30 @@
+go.property("x", 1)
+go.property("y", 1)
+go.property("color_is_red", true)
+go.property("is_opened", false)
+
+function init(self)
+	self.is_opened = false
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("open_circle") and not self.is_opened then
+		if self.color_is_red then
+			msg.post("#sprite", "play_animation", {id = hash("red_circle")})
+		else 
+			msg.post("#sprite", "play_animation", {id = hash("blue_circle")})
+		end
+		self.is_opened = true
+		msg.post("/gamerules_folder#gamerules_func", "open_circle")
+		
+	elseif message_id == hash("open_circle_game_beginning") then
+		if self.color_is_red then
+			msg.post("#sprite", "play_animation", {id = hash("red_circle")})
+		else 
+			msg.post("#sprite", "play_animation", {id = hash("blue_circle")})
+		end
+		
+	elseif message_id == hash("close_circle_game_beginning") then
+		msg.post("#sprite", "play_animation", {id = hash("gray_circle")})
+	end
+end
